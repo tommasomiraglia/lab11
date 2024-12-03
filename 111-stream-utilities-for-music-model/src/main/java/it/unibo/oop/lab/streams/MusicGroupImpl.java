@@ -2,10 +2,12 @@ package it.unibo.oop.lab.streams;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.Set;
+import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 /**
@@ -29,19 +31,36 @@ public final class MusicGroupImpl implements MusicGroup {
         this.songs.add(new MusicGroupImpl.Song(songName, albumName, duration));
     }
 
-    @Override
-    public Stream<String> orderedSongNames() {
-        return null;
-    }
-
+     /**
+     * @return all the albums of this group
+     */
     @Override
     public Stream<String> albumNames() {
-        return null;
+        return  this.albums.keySet().stream(); 
     }
 
+    /**
+     * @return all the songs for this group, ordered by name
+     */
+    @Override
+    public Stream<String> orderedSongNames() {
+        return this.songs.stream().map(Song::getSongName).sorted();        
+    }
+
+    /**
+     * @param year
+     *            the year
+     * @return all the albums in the given year
+     */
     @Override
     public Stream<String> albumInYear(final int year) {
-        return null;
+        Map<String, Integer> supportAlbums = new HashMap<>();
+        albums.forEach( (x, y)-> {
+            if ( y == year){
+                supportAlbums.put(x,y);
+            }
+        });
+        return supportAlbums.keySet().stream();
     }
 
     @Override
